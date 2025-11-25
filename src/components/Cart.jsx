@@ -1,6 +1,6 @@
 import { useDispatch, useSelector } from "react-redux";
 import ItemList from "./ItemList";
-import { useEffect, useState } from "react";
+
 import { clearCart } from "../ReduxStore/cartSlice";
 
 const Cart = () => {
@@ -13,16 +13,9 @@ const Cart = () => {
   const cartItems = useSelector((store) => store.cart.items);
   console.log("Cartt-", cartItems);
 
-  const [totalPrice, setTotalPrice] = useState(0);
-
-  useEffect(() => {
-    cartItems.map((item) => {
-      setTotalPrice(
-        (prevPrice) =>
-          (prevPrice += item.card.info.price || item.card.info.defaultPrice)
-      );
-    });
-  }, []);
+  const totalPrice = cartItems.reduce((acc, item) => {
+    return acc + (item.card.info.price || item.card.info.defaultPrice);
+  }, 0);
 
   return (
     <div className="w-6/12 bg-gray-50 shadow-lg p-4 mx-auto my-4 text-center font-bold">
